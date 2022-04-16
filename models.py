@@ -5,6 +5,7 @@ from sqlalchemy import Column, String, Integer, Boolean, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 
+from utils import ReleaseDate
 
 database_path = os.environ['DATABASE_URL']
 if database_path.startswith("postgres://"):
@@ -58,7 +59,7 @@ class Movies(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'release_date': self.release_date,
+            'release_date': ReleaseDate.date_object_to_string(self.release_date),
         }
 
 

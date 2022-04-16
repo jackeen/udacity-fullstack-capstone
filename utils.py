@@ -11,4 +11,4 @@ class ReleaseDate():
 
 	@classmethod
 	def date_object_to_string(self, date: datetime.date) -> str:
-		return ''
+		return date.strftime('%Y-%m-%d')
