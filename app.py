@@ -307,6 +307,43 @@ def create_app(test_config=None):
     # def logout():
     #     pass
 
+
+    @app.errorhandler(404)
+    def not_found(err):
+        return jsonify({
+            'success': False,
+            'error': 404,
+            'message': 'Not found',
+        }), 404
+
+
+    @app.errorhandler(422)
+    def unprocessable_entity(err):
+        return jsonify({
+            'success': False,
+            'error': 422,
+            'message': 'Unprocessable entity',
+        }), 422
+
+
+    @app.errorhandler(405)
+    def method_not_allowed(err):
+        return jsonify({
+            'success': False,
+            'error': 405,
+            'message': 'Method not allowed',
+        }), 405
+
+
+    @app.errorhandler(500)
+    def method_not_allowed(err):
+        return jsonify({
+            'success': False,
+            'error': 500,
+            'message': 'Please try again later',
+        }), 500
+
+
     return app
 
 
