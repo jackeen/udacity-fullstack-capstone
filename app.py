@@ -31,7 +31,7 @@ def create_app(test_config=None):
 
     @app.route('/api/movies', methods=['GET'])
     def get_movies():
-        movies = Movies.query.all()
+        movies = Movies.query.order_by('id').all()
         return jsonify({
             'success': True,
             'count': len(movies),
@@ -82,7 +82,7 @@ def create_app(test_config=None):
 
     @app.route('/api/movies/<int:id>/actors', methods=['POST'])
     def movie_associates_actor(id):
-        movie = db.session.query(Movies).get(id)
+        movie = Movies.query.get(id)
         if movie is None:
             abort(404)
 
@@ -90,15 +90,28 @@ def create_app(test_config=None):
         if body is None:
             abort(422)
 
+        # the attaching of actor and movie state
+        # when its value is true dedicating that the actor associates with the movie
+        # otherwise, the actor disconnets the movie
+        attach_state = body.get('attach_state')
+        if attach_state is None or isinstance(attach_state, bool) == False:
+            abort(422)
+
         actor_id = body.get('actor_id')
         if actor_id is None:
             abort(422)
 
-        actor = db.session.query(Actors).get(actor_id)
+        actor = Actors.query.get(actor_id)
         if actor is None:
             abort(422)
 
-        movie.actors.append(actor)
+        if attach_state == True:
+            if actor not in movie.actors:
+                movie.actors.append(actor)
+        else:
+            if actor in movie.actors:
+                movie.actors.remove(actor)
+
         movie.update()
 
         return jsonify({
@@ -108,7 +121,7 @@ def create_app(test_config=None):
 
     @app.route('/api/movies/<int:id>', methods=['PATCH'])
     def patch_an_movie(id):
-        movie = db.session.query(Movies).get(id)
+        movie = Movies.query.get(id)
         if movie is None:
             abort(404)
 
@@ -139,7 +152,7 @@ def create_app(test_config=None):
 
     @app.route('/api/movies/<int:id>', methods=['DELETE'])
     def delete_a_movie(id):
-        movie = db.session.query(Movies).get(id)
+        movie = Movies.query.get(id)
         if movie is None:
             abort(404)
 
@@ -152,7 +165,7 @@ def create_app(test_config=None):
 
     @app.route('/api/actors', methods=['GET'])
     def get_actors():
-        actors = Actors.query.all()
+        actors = Actors.query.order_by('id').all()
         return jsonify({
             'success': True,
             'count': len(actors),
