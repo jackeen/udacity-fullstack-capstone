@@ -4,7 +4,6 @@ from flask import Flask, render_template, jsonify, redirect, request, abort
 from flask_cors import CORS
 
 from models import setup_db, db, Movies, Actors
-from utils import ReleaseDate
 
 
 def create_app(test_config=None):
@@ -32,7 +31,7 @@ def create_app(test_config=None):
 
     @app.route('/api/movies', methods=['GET'])
     def get_movies():
-        movies = db.session.query(Movies).all()
+        movies = Movies.query.all()
         return jsonify({
             'success': True,
             'count': len(movies),
@@ -42,14 +41,14 @@ def create_app(test_config=None):
 
     @app.route('/api/movies/<int:id>', methods=['GET'])
     def get_a_movie_detail(id):
-        movie = db.session.query(Movies).get(id)
+        movie = Movies.query.get(id)
         if movie is None:
             abort(404)
         
         return jsonify({
             'success': True,
             'movie': movie.format(),
-            'actors': [actor.format() for actor in movie.actors],
+            'actors': movie.format_actors(),
         })
 
 
@@ -68,27 +67,16 @@ def create_app(test_config=None):
 
         release_date = None
         try:
-            release_date = ReleaseDate\
-                .date_string_to_object(release_date_string)
+            release_date = Movies.date_string_to_object(release_date_string)
         except:
             abort(422)
 
         movie = Movies(title=title, release_date=release_date)
-        movie_id = None
-        
-        try:
-            db.session.add(movie)
-            db.session.commit()
-        except:
-            db.session.rollback()
-            abort(500)
-        finally:
-            movie_id = movie.id
-            db.session.close()
+        movie.insert()
 
         return jsonify({
             'success': True,
-            'movie_id': movie_id,
+            'movie_id': movie.id,
         })
 
 
@@ -110,14 +98,8 @@ def create_app(test_config=None):
         if actor is None:
             abort(422)
 
-        try:
-            movie.actors.append(actor)
-            db.session.commit()
-        except:
-            db.session.rollback()
-            abort(500)
-        finally:
-            db.session.close()
+        movie.actors.append(actor)
+        movie.update()
 
         return jsonify({
             'success': True,
@@ -143,18 +125,12 @@ def create_app(test_config=None):
         release_date_string = body.get('release_date')
         if release_date_string != None and release_date_string != '':
             try:
-                movie.release_date = ReleaseDate\
+                movie.release_date = Movies\
                     .date_string_to_object(release_date_string)
             except:
                 abort(422)
 
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
-            abort(500)
-        finally:
-            db.session.close()
+        movie.update()
 
         return jsonify({
             'success': True,
@@ -167,14 +143,7 @@ def create_app(test_config=None):
         if movie is None:
             abort(404)
 
-        try:
-            db.session.delete(movie)
-            db.session.commit()
-        except:
-            db.session.rollback()
-            abort(500)
-        finally:
-            db.session.close()
+        movie.delete()
 
         return jsonify({
             'success': True,
@@ -183,7 +152,7 @@ def create_app(test_config=None):
 
     @app.route('/api/actors', methods=['GET'])
     def get_actors():
-        actors = db.session.query(Actors).all()
+        actors = Actors.query.all()
         return jsonify({
             'success': True,
             'count': len(actors),
@@ -193,14 +162,14 @@ def create_app(test_config=None):
 
     @app.route('/api/actors/<int:id>', methods=['GET'])
     def get_an_actor_detail(id):
-        actor = db.session.query(Actors).get(id)
+        actor = Actors.query.get(id)
         if actor is None:
             abort(404)
         
         return jsonify({
             'success': True,
             'actor': actor.format(),
-            'movies': [movie.format() for movie in actor.movies],
+            'movies': actor.format_movies(),
         })
 
 
@@ -220,27 +189,17 @@ def create_app(test_config=None):
             abort(422)
 
         actor = Actors(name=name, age=age, gender=gender)
-        actor_id = None
-        
-        try:
-            db.session.add(actor)
-            db.session.commit()
-        except:
-            db.session.rollback()
-            abort(500)
-        finally:
-            actor_id = actor.id
-            db.session.close()
+        actor.insert()
 
         return jsonify({
             'success': True,
-            'actor_id': actor_id,
+            'actor_id': actor.id,
         })
 
 
     @app.route('/api/actors/<int:id>', methods=['PATCH'])
     def patch_an_actor(id):
-        actor = db.session.query(Actors).get(id)
+        actor = Actors.query.get(id)
         if actor is None:
             abort(404)
 
@@ -266,13 +225,7 @@ def create_app(test_config=None):
                 abort(422)
             actor.gender = gender
 
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
-            abort(500)
-        finally:
-            db.session.close()
+        actor.update()
 
         return jsonify({
             'success': True,
@@ -281,18 +234,11 @@ def create_app(test_config=None):
 
     @app.route('/api/actors/<int:id>', methods=['DELETE'])
     def delete_an_actor(id):
-        actor = db.session.query(Actors).get(id)
+        actor = Actors.query.get(id)
         if actor is None:
             abort(404)
         
-        try:
-            db.session.delete(actor)
-            db.session.commit()
-        except:
-            db.session.rollback()
-            abort(500)
-        finally:
-            db.session.close()
+        actor.delete()
         
         return jsonify({
             'sucess': True,
