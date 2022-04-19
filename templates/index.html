@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{title}}</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+	<header class="header">
+		<h3>{{title}}</h3>
+		<p>
+			<span>{{role}}</span>
+			<a href="{{login_url}}">login</a>
+			<a href="{{logout_url}}">logout</a>
+		</p>
+	</header>
+
+	<ul class="wrap option-list">
+		<li><button id="post_movie">Post Movie</button></li>
+		<li><button id="post_actor">Post Actor</button></li>
+	</ul>
+
+	<div class="wrap">
+		<ul id="content_tab" class="content-tab">
+			<li data-type="movie">Show All Movies</li>
+			<li data-type="actor">Show All Actors</li>
+		</ul>
+		<div id="content"></div>
+	</div>
+
+	<script type="module" src="{{ url_for('static', filename='app.mjs') }}"></script>
+</body>
+</html>

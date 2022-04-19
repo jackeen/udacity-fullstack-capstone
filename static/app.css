@@ -1,0 +1,185 @@
+/* reset */
+body, h1, h2, h3, p, ul, ol, li, button {
+	padding: 0;
+	margin: 0;
+}
+ul, ol {
+	list-style: none;
+	list-style-position: outside;
+}
+
+/* global frame */
+html {
+	--main-highlight: darkslateblue;
+	--second-highlight: darkcyan;
+	font-family: sans-serif;
+	font-size: 16px;
+}
+body {
+	background-color: #eee;
+}
+h1 {
+	font-size: 1.5rem;
+}
+h2 {
+	font-size: 1.25rem;
+}
+h3 {
+	font-size: 1rem;
+}
+button {
+	padding: 0.5rem 1rem;
+	border: none;
+	border-radius: 4px;
+	background-color: var(--main-highlight);
+	color: white;
+	user-select: none;
+	cursor: pointer;
+}
+button:hover {
+	filter: brightness(1.1);
+}
+button:active {
+	filter: brightness(0.9);
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"]{
+	width: 100%;
+	height: 2rem;
+	box-sizing: border-box;
+	line-height: 2rem;
+	border: lightgrey 1px solid;
+	border-radius: 2px;
+}
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus{
+	border: lightblue 1px solid;
+}
+
+
+dialog {
+	min-width: 16rem;
+	border: none;
+    border-radius: 6px;
+    box-shadow: 2px 2px 4px rgb(0 0 0 / 40%);
+    padding: 1rem;
+}
+dialog form {
+	padding: 0.5rem 0;
+}
+dialog input {
+	margin-bottom: 0.5rem;
+}
+dialog .btn {
+	display: flex;
+	justify-content: flex-end;
+}
+dialog button {
+	margin-left: 0.5rem;
+}
+
+
+.header {
+	position: sticky;
+	display: flex;
+	align-items: center;
+    justify-content: space-between;
+	width: 100%;
+	height: 4rem;
+	box-sizing: border-box;
+	padding: 0 1rem;
+	background-color: black;
+}
+.header > h3 {
+	color: white;
+}
+.header a {
+	color: white;
+}
+
+
+.wrap {
+	padding: 1rem;
+}
+
+
+.option-list {
+	display: flex;
+}
+.option-list li {
+	margin-right: 0.5rem;
+}
+
+
+movie-list {
+}
+movie-list .loading{
+	padding: 0.5rem;
+}
+movie-list > ul {
+	background-color: white;
+}
+movie-list li {
+	padding: 0.5rem;
+	margin-bottom: 0.5rem;
+	border-bottom: lightgray dashed;
+}
+movie-list .item-header {
+	display: flex;
+	justify-content: space-between;
+    align-items: center;
+}
+movie-list button {
+	background-color: var(--second-highlight);
+}
+movie-list .actors {
+	display: flex;
+}
+movie-list .actor-item {
+	background-color: lightgrey;
+    border-radius: 4px;
+    margin: 0 5px 5px 0;
+    padding: 0.5rem;
+}
+
+
+
+actor-list {
+}
+actor-list .loading{
+	padding: 0.5rem;
+}
+actor-list > ul {
+	background-color: white;
+}
+actor-list li {
+	padding: 0.5rem;
+	margin-bottom: 0.5rem;
+	border-bottom: lightgray dashed;
+}
+actor-list .item-header {
+	display: flex;
+	justify-content: space-between;
+    align-items: center;
+}
+actor-list button {
+	background-color: var(--second-highlight);
+}
+
+
+.content-tab {
+	display: flex;
+}
+.content-tab li {
+	padding: 0.5rem 1rem;
+	margin-right: 0.5rem;
+	background-color: lightgray;
+	user-select: none;
+	cursor: pointer;
+}
+.content-tab li.selected {
+	background-color: white;
+}
