@@ -4,6 +4,7 @@ from flask import Flask, render_template, jsonify, redirect, request, abort
 from flask_cors import CORS
 
 from models import setup_db, db, Movies, Actors
+from auth import requires_auth, AuthError, get_login_url, get_logout_url
 
 
 def create_app(test_config=None):
@@ -26,11 +27,27 @@ def create_app(test_config=None):
 
     @app.route('/')
     def home_page():
-        return render_template('index.html', title='Casting Agency')
+        return render_template('index.html', 
+            title='Casting Agency',
+            login_url=get_login_url(),
+            logout_url=get_logout_url())
+
+
+    @app.route('/login_callback')
+    def login_callback():
+        return render_template('login_callback.html',
+            title='Login processing')
+
+
+    @app.route('/logout_callback')
+    def logout_callback():
+        return render_template('logout_callback.html',
+            title='Logout processing')
 
 
     @app.route('/api/movies', methods=['GET'])
-    def get_movies():
+    @requires_auth(permission='get:movies')
+    def get_movies(payload):
         movies = Movies.query.order_by('id').all()
         return jsonify({
             'success': True,
@@ -40,7 +57,8 @@ def create_app(test_config=None):
 
 
     @app.route('/api/movies/<int:id>', methods=['GET'])
-    def get_a_movie_detail(id):
+    @requires_auth(permission='get:movies')
+    def get_a_movie_detail(payload, id):
         movie = Movies.query.get(id)
         if movie is None:
             abort(404)
@@ -53,7 +71,8 @@ def create_app(test_config=None):
 
 
     @app.route('/api/movies', methods=['POST'])
-    def post_a_movie():
+    @requires_auth(permission='post:movies')
+    def post_a_movie(payload):
         body = request.get_json()
         if body is None:
             abort(422)
@@ -80,8 +99,9 @@ def create_app(test_config=None):
         })
 
 
-    @app.route('/api/movies/<int:id>/actors', methods=['POST'])
-    def movie_associates_actor(id):
+    @app.route('/api/movies/<int:id>/actors', methods=['PATCH'])
+    @requires_auth(permission='patch:movies')
+    def movie_associates_actor(payload, id):
         movie = Movies.query.get(id)
         if movie is None:
             abort(404)
@@ -120,7 +140,8 @@ def create_app(test_config=None):
 
 
     @app.route('/api/movies/<int:id>', methods=['PATCH'])
-    def patch_an_movie(id):
+    @requires_auth(permission='patch:movies')
+    def patch_an_movie(payload, id):
         movie = Movies.query.get(id)
         if movie is None:
             abort(404)
@@ -151,7 +172,8 @@ def create_app(test_config=None):
 
 
     @app.route('/api/movies/<int:id>', methods=['DELETE'])
-    def delete_a_movie(id):
+    @requires_auth(permission='delete:movies')
+    def delete_a_movie(payload, id):
         movie = Movies.query.get(id)
         if movie is None:
             abort(404)
@@ -164,7 +186,8 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors', methods=['GET'])
-    def get_actors():
+    @requires_auth(permission='get:actors')
+    def get_actors(payload):
         actors = Actors.query.order_by('id').all()
         return jsonify({
             'success': True,
@@ -174,7 +197,8 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors/<int:id>', methods=['GET'])
-    def get_an_actor_detail(id):
+    @requires_auth(permission='get:actors')
+    def get_an_actor_detail(payload, id):
         actor = Actors.query.get(id)
         if actor is None:
             abort(404)
@@ -187,7 +211,8 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors', methods=['POST'])
-    def post_an_actor():
+    @requires_auth(permission='post:actors')
+    def post_an_actor(payload):
         body = request.get_json()
         if body is None:
             abort(422)
@@ -211,7 +236,8 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors/<int:id>', methods=['PATCH'])
-    def patch_an_actor(id):
+    @requires_auth(permission='patch:actors')
+    def patch_an_actor(payload, id):
         actor = Actors.query.get(id)
         if actor is None:
             abort(404)
@@ -246,7 +272,8 @@ def create_app(test_config=None):
 
 
     @app.route('/api/actors/<int:id>', methods=['DELETE'])
-    def delete_an_actor(id):
+    @requires_auth(permission='delete:actors')
+    def delete_an_actor(payload, id):
         actor = Actors.query.get(id)
         if actor is None:
             abort(404)
@@ -256,15 +283,6 @@ def create_app(test_config=None):
         return jsonify({
             'sucess': True,
         })
-
-
-    # @app.route('/login')
-    # def login():
-    #     pass
-
-    # @app.route('/logout')
-    # def logout():
-    #     pass
 
 
     @app.errorhandler(404)
@@ -292,6 +310,15 @@ def create_app(test_config=None):
             'error': 405,
             'message': 'Method not allowed',
         }), 405
+
+
+    @app.errorhandler(AuthError)
+    def auth_error(error):
+        return jsonify({
+            "success": False,
+            "error": error.status_code,
+            "message": error.error['description']
+        }), error.status_code
 
 
     @app.errorhandler(500)
