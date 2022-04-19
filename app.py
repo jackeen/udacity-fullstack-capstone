@@ -281,7 +281,7 @@ def create_app(test_config=None):
         actor.delete()
         
         return jsonify({
-            'sucess': True,
+            'success': True,
         })
 
 
