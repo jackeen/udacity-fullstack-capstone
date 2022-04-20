@@ -12,7 +12,9 @@ class Fetch {
 	}
 
 	static get(url, fn) {
-		this.checkToken();
+		if (!this.checkToken()) {
+			return;
+		}
 		fetch(url, {
 			method: 'GET',
 			cache: 'no-cache',
@@ -30,7 +32,9 @@ class Fetch {
 	}
 
 	static post(url, data, fn) {
-		this.checkToken();
+		if (!this.checkToken()) {
+			return;
+		}
 		fetch(url, {
 			method: 'POST',
 			cache: 'no-cache',
@@ -49,7 +53,9 @@ class Fetch {
 	}
 
 	static patch(url, data, fn) {
-		this.checkToken();
+		if (!this.checkToken()) {
+			return;
+		}
 		fetch(url, {
 			method: 'PATCH',
 			cache: 'no-cache',
@@ -68,7 +74,9 @@ class Fetch {
 	}
 
 	static delete(url, fn) {
-		this.checkToken();
+		if (!this.checkToken()) {
+			return;
+		}
 		fetch(url, {
 			method: 'DELETE',
 			cache: 'no-cache',
