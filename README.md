@@ -223,6 +223,7 @@ payload:
 	"name": "the movie",
 	"release_date": "2022-09-30"
 }
+```
 
 The roles with **patch:movies** permission will get:
 ```json
