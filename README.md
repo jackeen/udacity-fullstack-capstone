@@ -2,7 +2,10 @@
 
 This capstone project developed for the Udacity Fullstack program final homework.
 
-## Role and Permission
+The deployed project demo on heroku is here.
+> https://casting-agency-jack.herokuapp.com/
+
+## Role and Permissions
 
 There are three roles with some permissions in this project.
 These permissions based on two resources. 
@@ -331,7 +334,7 @@ The roles with **post:actors** permission will get:
 
 `PATCH /api/actors/<int:id>`
 
-> Edit the exist actor by its id. There are three variables can be accepted. Once the request be lunched, at least one variable must load in payload, such as name, age or gender. If the type of variables is worry, an 422 error will be returned.
+> Edit the exist actor by its id. There are three variables can be accepted. Once the request be lunched, at least one variable must load in payload, such as name, age or gender. If the type of variables is wrong, an 422 error will be returned.
 
 parameters:
 - id:int, actor's id
@@ -398,4 +401,18 @@ The other common errors' format.
 	"message": "Please try again later", 
 	"success": false
 }
+```
+
+## Unit test
+
+Because of authorization, the token should provide with the **test_app.py**. In the root directory of this project, the **test_token.json** includes three roles token for endpoint behavior and role-based access. 
+
+When the token refreshed, the test token should be replaced.
+
+The test-database config can be found in **setup.sh**
+
+Run the unit test command:
+```sh
+source setup.sh
+python3 test_app.py
 ```

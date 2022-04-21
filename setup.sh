@@ -1,5 +1,6 @@
 #!/bin/bash
 export DATABASE_URL="postgresql://postgres@localhost:5432/postgres"
+export TEST_DATABASE_URL="postgresql://postgres@localhost:5432/postgres_test"
 
 export AUTH0_DOMAIN="dev-9z1pdcyd.us.auth0.com"
 export AUTH0_CLIENT_ID="wzZ2pQmzRJKFTn8PtXuvxGu8UhMzdF52"

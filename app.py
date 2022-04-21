@@ -10,7 +10,12 @@ from auth import requires_auth, AuthError, get_login_url, get_logout_url
 def create_app(test_config=None):
 
     app = Flask(__name__)
-    setup_db(app)
+
+    if test_config != None:
+        setup_db(app, test_config.get('database_url'))
+    else:
+        setup_db(app)
+
     CORS(app)
 
     # @app.route('/')
