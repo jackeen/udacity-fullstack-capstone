@@ -88,23 +88,23 @@ If the things goes well, we can access the server by next two ways
 1. browser, http://localhost:8080
 2. curl http://localhost:8080
 
-## Role based access and endpoint
+## Role based access and endpoints explanations
 
 All access of endpoints needs login, if no, there will be an error arise.
 ```json
 {
-	"error": 401, 
-	"message": "Authorization header missing.", 
-	"success": false
+    "error": 401, 
+    "message": "Authorization header missing.", 
+    "success": false
 }
 ```
 
 If an user of a role without permissions to access some data, it will get this error.
 ```json
 {
-	"error": 403, 
-	"message": "The action of user is forbidden.", 
-	"success": false
+    "error": 403, 
+    "message": "The action of user is forbidden.", 
+    "success": false
 }
 ```
 
@@ -119,15 +119,15 @@ payload: none
 The roles with **get:movies** permission will get:
 ```json
 {
-	"count": 1, 
-	"movies": [
-	{
-		"id": 2, 
-		"release_date": "2022-11-30", 
-		"title": "second movie 2"
-	}
-	], 
-	"success": true
+    "count": 1, 
+    "movies": [
+    {
+        "id": 2, 
+        "release_date": "2022-11-30", 
+        "title": "second movie 2"
+    }
+    ], 
+    "success": true
 }
 ```
 
@@ -143,20 +143,20 @@ payload: none
 The roles with **get:movies** permission will get:
 ```json
 {
-	"actors": [
-	{
-		"age": 20, 
-		"gender": false, 
-		"id": 1, 
-		"name": "Bill"
-	}
-	], 
-	"movie": {
-	"id": 2, 
-	"release_date": "2022-11-30", 
-	"title": "second movie 2"
-	}, 
-	"success": true
+    "actors": [
+    {
+        "age": 20, 
+        "gender": false, 
+        "id": 1, 
+        "name": "Bill"
+    }
+    ], 
+    "movie": {
+        "id": 2, 
+        "release_date": "2022-11-30", 
+        "title": "second movie 2"
+    }, 
+    "success": true
 }
 ```
 
@@ -172,16 +172,16 @@ payload:
 
 ```json
 {
-	"name": "the movie",
-	"release_date": "2022-09-30"
+    "name": "the movie",
+    "release_date": "2022-09-30"
 }
 ```
 
 The roles with **post:movies** permission will get:
 ```json
 {
-	"movie_id": 16, 
-	"success": true
+    "movie_id": 16, 
+    "success": true
 }
 ```
 
@@ -198,15 +198,15 @@ payload:
 
 ```json
 {
-	"actor_id": "1",
-	"attach_state": true
+    "actor_id": "1",
+    "attach_state": true
 }
 ```
 
 The roles with **patch:movies** permission will get:
 ```json
 {
-	"success": true
+    "success": true
 }
 ```
 
@@ -223,15 +223,15 @@ payload:
 
 ```json
 {
-	"name": "the movie",
-	"release_date": "2022-09-30"
+    "name": "the movie",
+    "release_date": "2022-09-30"
 }
 ```
 
 The roles with **patch:movies** permission will get:
 ```json
 {
-	"success": true
+    "success": true
 }
 ```
 
@@ -247,7 +247,7 @@ payload: none
 The roles with **delete:movies** permission will get:
 ```json
 {
-	"success": true
+    "success": true
 }
 ```
 
@@ -258,16 +258,16 @@ parameters: none
 The roles with **get:actors** permission will get:
 ```json
 {
-	"actors": [
-	{
-		"age": 20, 
-		"gender": true, 
-		"id": 1, 
-		"name": "Bill"
-	}
-	], 
-	"count": 1, 
-	"success": true
+    "actors": [
+    {
+        "age": 20, 
+        "gender": true, 
+        "id": 1, 
+        "name": "Bill"
+    }
+    ], 
+    "count": 1, 
+    "success": true
 }
 ```
 
@@ -379,27 +379,27 @@ The other common errors' format.
 
 ```json
 {
-	"success": false,
-	"error": 404,
-	"message": "Not Found"
+    "success": false,
+    "error": 404,
+    "message": "Not Found"
 }
 
 {
-	"success": false,
-	"error": 405,
-	"message": "Method not allowed"
+    "success": false,
+    "error": 405,
+    "message": "Method not allowed"
 }
 
 {
-	"error": 422, 
-	"message": "Unprocessable entity", 
-	"success": false
+    "error": 422, 
+    "message": "Unprocessable entity", 
+    "success": false
 }
 
 {
-	"error": 500, 
-	"message": "Please try again later", 
-	"success": false
+    "error": 500, 
+    "message": "Please try again later", 
+    "success": false
 }
 ```
 
